@@ -14,17 +14,20 @@ class SettingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print ("view did load") 
 
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(animated: Bool) {
-        let defaults = NSUserDefaults.standardUserDefaults()
+    override func viewWillAppear(_ animated: Bool) {
+        let defaults = UserDefaults.standard
         
-        let tipValue = defaults.integerForKey(Constants.defaultTipKey)
+        let tipValue = defaults.integer(forKey: Constants.defaultTipKey)
         tipLabel.text = String(tipValue)
         tipPercentageValue.value = Double(tipValue)
         
+        print("Tip value is: ")
         print(tipValue)
     }
 
@@ -33,12 +36,12 @@ class SettingsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func changeDefaultTip(sender: UIStepper) {
+    @IBAction func changeDefaultTip(_ sender: UIStepper) {
         let tipValue = Int(sender.value)
         tipLabel.text = String(tipValue)
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setInteger(tipValue, forKey: Constants.defaultTipKey)
+        let defaults = UserDefaults.standard
+        defaults.set(tipValue, forKey: Constants.defaultTipKey)
         defaults.synchronize()
     }
     

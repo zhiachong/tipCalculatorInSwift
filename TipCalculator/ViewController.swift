@@ -27,17 +27,17 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     }
     
-    override func viewWillAppear(animated: Bool) {
-        print("view will appear")
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let defaultTipValue = defaults.integerForKey(Constants.defaultTipKey)
-        print ("default tipv aleu" )
-        print(defaultTipValue)
-        if (defaultTipValue > 0) {
-            tipLabel.text = String(defaultTipValue)
-            self.curTipValue = defaultTipValue
-            calculate(Double(billText.text!) ?? 0, tip: defaultTipValue)
+    override func viewWillAppear(_ animated: Bool) {
+        let defaults = UserDefaults.standard
+        var defaultTipValue = defaults.integer(forKey: Constants.defaultTipKey)
+        
+        if (defaultTipValue <= 0) {
+            defaultTipValue = 15;
         }
+        
+        tipLabel.text = String(defaultTipValue)
+        self.curTipValue = defaultTipValue
+        calculate(Double(billText.text!) ?? 0, tip: defaultTipValue)
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,11 +45,11 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func onTap(sender: UITapGestureRecognizer) {
+    @IBAction func onTap(_ sender: UITapGestureRecognizer) {
         view.endEditing(true);
     }
     
-    @IBAction func calculateTips(sender: AnyObject) {
+    @IBAction func calculateTips(_ sender: AnyObject) {
         if (sender.text != nil) {
             
             let bill = Double(sender.text!) ?? 0
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
     }
     
     
-    private func calculate(bill: Double, tip: Int) {
+    fileprivate func calculate(_ bill: Double, tip: Int) {
         let tipFloat = Double(tip)/100.0
         let total = bill * (1+tipFloat);
         let tips = bill * tipFloat;
@@ -69,14 +69,14 @@ class ViewController: UIViewController {
         self.updateBill(total)
         
         if (total > 0) {
-            UIView.animateWithDuration(0.5, animations: {
+            UIView.animate(withDuration: 0.5, animations: {
                 self.billSplitView.alpha = 1
             })
         }
         
     }
     
-    private func updateBill(total: Double) {
+    fileprivate func updateBill(_ total: Double) {
         let onePerson = total
         let twoPerson = total / 2
         let threePerson = total / 3
@@ -88,7 +88,7 @@ class ViewController: UIViewController {
         fourPersonBill.text = self.formatMoney(fourPerson)
     }
     
-    private func formatMoney(value: Double) -> String {
+    fileprivate func formatMoney(_ value: Double) -> String {
         return String(format: "$%.2f", value)
     }
 }
